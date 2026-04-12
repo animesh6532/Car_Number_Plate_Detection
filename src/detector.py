@@ -55,7 +55,7 @@ class PlateDetector:
             print("Model already exists.")
 
     # =========================
-    # DETECT PLATE (FIXED)
+    # DETECT PLATE 
     # =========================
     def detect_plate(self, image):
         if len(image.shape) == 3:
@@ -86,7 +86,7 @@ class PlateDetector:
         return img_copy
 
     # =========================
-    # EXTRACT REGION (FIXED 🔥)
+    # EXTRACT REGION 
     # =========================
     def extract_plate_region(self, image, coordinates):
         crops = []

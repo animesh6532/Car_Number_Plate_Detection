@@ -6,6 +6,11 @@ Welcome to **ANPR Lite**, a premium, production-ready Automatic Number Plate Rec
 
 ## 🖼️ Project Demo
 
+### 📌 Animated Demo
+![ANPR Demo](static/screenshots/demo.gif)
+
+---
+
 ### 📌 Image Upload Detection
 ![Upload Demo](static/screenshots/upload.png)
 
