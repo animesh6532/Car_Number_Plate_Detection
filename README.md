@@ -1,41 +1,62 @@
 # Number Plate Detection System (ANPR Lite)
 
-Welcome to **ANPR Lite**, a premium, production-ready Automatic Number Plate Recognition (ANPR) web application. This platform offers seamless vehicle number plate detection combined with Optical Character Recognition (OCR), wrapped in a sleek, scalable Glassmorphism UI. You can upload local images or harness the power of your webcam for live tracking!
+Welcome to **ANPR Lite**, a premium, production-ready Automatic Number Plate Recognition (ANPR) web application. This platform offers seamless vehicle number plate detection combined with Optical Character Recognition (OCR), wrapped in a sleek, scalable Glassmorphism UI.
 
-![ANPR UI Demo Placeholder](https://via.placeholder.com/800x400?text=ANPR+Lite+Premium+Screenshot)
+---
+
+## 🖼️ Project Demo
+
+### 📌 Image Upload Detection
+![Upload Demo](static/screenshots/upload.png)
+
+---
+
+### 📌 Live Camera Detection
+![Camera Demo](static/screenshots/camera.png)
+
+---
+
+### 📌 Detection Result & OCR Output
+![Result Demo](static/screenshots/result.png)
+
+---
 
 ## 🎯 Features
 
-- **Image Upload:** Upload vehicle images directly; the backend locates the number plate and crops it.
-- **Live Webcam:** Access the system via device camera using WebRTC APIs & process frames on demand.
-- **Computer Vision:** Employs OpenCV hardware-accelerated Haar Cascades to detect Russian format and generic number plates automatically.
-- **Optical Character Recognition (OCR):** Integrates Tesseract to extract and digitise characters from the detected plate.
-- **Premium Design:** Features a dark mode, glassmorphism interface styled purely with minimal CSS and fluid animations.
-- **Graceful Fallbacks:** The pipeline supports environments without Tesseract by switching back elegantly.
+- **Image Upload:** Upload vehicle images and detect number plates instantly.
+- **Live Webcam:** Real-time detection using camera input.
+- **Plate Detection:** OpenCV Haar Cascade based detection.
+- **OCR Recognition:** Extracts plate text using EasyOCR/Tesseract.
+- **Plate Region Extraction:** Crops detected plate for better accuracy.
+- **Modern UI:** Clean glassmorphism-based responsive design.
+- **Error Handling:** Robust fallback system for OCR and detection failures.
+
+---
 
 ## 📁 Folder Structure
 
 ```
-number_plate_web_app/
+Car_Number_Plate_Detection/
 │
-├── app.py                   # Main Flask backend application core
-├── requirements.txt         # Python dependency libraries list
-├── README.md                # Project documentation
+├── app.py                       # Main Flask backend application core
+├── requirements.txt             # Python dependency libraries list
+├── README.md                    # Project documentation
 │
 ├── models/
-│   └── haarcascade_...xml   # Downloaded Automatically! (Haar Cascade Weights)
+│   └── haarcascade_russian_plate_number.xml   # Haar Cascade plate detector model
+│
+├── src/
+│   └── detector.py              # OpenCV detection and OCR helper logic
 │
 ├── static/
-│   ├── uploads/             # Raw user uploaded images
-│   ├── outputs/             # Images containing bounding boxes
-│   └── styles.css           # Vanilla CSS implementing Glassmorphism
+│   ├── styles.css               # Glassmorphism UI styling
+│   ├── screenshots/             # Demo screenshots shown in README
+│   ├── uploads/                 # Raw user uploaded images
+│   └── outputs/                 # Images with detection overlays
 │
-├── templates/
-│   ├── index.html           # Homepage containing dynamic fallback upload forms
-│   └── camera.html          # WebRTC integrated interface
-│
-└── src/
-    └── detector.py          # OpenCV logic separating backend from logic pipeline
+└── templates/
+    ├── index.html               # Homepage and upload interface
+    └── camera.html              # Webcam detection UI
 ```
 
 ## 🚀 Installation & Setup
