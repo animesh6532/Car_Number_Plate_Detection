@@ -4,20 +4,9 @@ Welcome to **ANPR Lite**, a premium, production-ready Automatic Number Plate Rec
 
 ---
 
-## 🖼️ Project Demo
+## 🎥 Project Demo
 
-### 📌 Image Upload Detection
-![Upload Demo](static/screenshots/upload.png)
-
----
-
-### 📌 Live Camera Detection
-![Camera Demo](static/screenshots/camera.png)
-
----
-
-### 📌 Detection Result & OCR Output
-![Result Demo](static/screenshots/result.png)
+![ANPR Demo](static/screenshots/demo.gif)
 
 ---
 
