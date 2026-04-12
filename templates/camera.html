@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANPR Lite - Live Camera</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <header>
+        <h1>ANPR Lite</h1>
+        <p>Premium Number Plate Detection System</p>
+    </header>
+
+    <nav>
+        <a href="/" class="nav-link"><i class="fas fa-upload"></i> Upload Image</a>
+        <a href="/camera" class="nav-link active"><i class="fas fa-camera"></i> Live Camera</a>
+    </nav>
+
+    <main>
+        <div class="glass-panel">
+            <div class="camera-wrapper">
+                <video id="webcam" autoplay playsinline></video>
+                <!-- Hidden canvas for capturing frames -->
+                <canvas id="canvas" style="display:none;"></canvas>
+            </div>
+
+            <div class="camera-controls">
+                <button id="start-btn" class="btn" style="background-color: var(--success);">
+                    <i class="fas fa-play"></i> Start Camera
+                </button>
+                <button id="capture-btn" class="btn" disabled>
+                    <i class="fas fa-camera-retro"></i> Capture Frame
+                </button>
+            </div>
+
+            <div class="loader" id="loader"></div>
+
+            <div class="results-container" id="results">
+                <div class="image-preview-wrapper">
+                    <img id="result-img" src="" alt="Processed Img" />
+                </div>
+                <div class="extraction-result">
+                    <h3>Extracted Plate Text</h3>
+                    <div id="plate-text">--</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const video = document.getElementById('webcam');
+        const canvas = document.getElementById('canvas');
+        const startBtn = document.getElementById('start-btn');
+        const captureBtn = document.getElementById('capture-btn');
+        const loader = document.getElementById('loader');
+        const results = document.getElementById('results');
+        const resultImg = document.getElementById('result-img');
+        const plateText = document.getElementById('plate-text');
+
+        let stream = null;
+
+        startBtn.addEventListener('click', async () => {
+            if (stream) {
+                // If already running, stop it
+                stream.getTracks().forEach(track => track.stop());
+                video.srcObject = null;
+                stream = null;
+                startBtn.innerHTML = '<i class="fas fa-play"></i> Start Camera';
+                startBtn.style.backgroundColor = 'var(--success)';
+                captureBtn.disabled = true;
+                return;
+            }
+
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { facingMode: "environment" }, 
+                    audio: false 
+                });
+                video.srcObject = stream;
+                
+                startBtn.innerHTML = '<i class="fas fa-stop"></i> Stop Camera';
+                startBtn.style.backgroundColor = 'var(--danger)';
+                captureBtn.disabled = false;
+            } catch (err) {
+                console.error("Camera completely inaccessible:", err);
+                alert("Camera permission denied or camera not found.");
+            }
+        });
+
+        captureBtn.addEventListener('click', async () => {
+            // Draw current video frame to canvas
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+            
+            // Get base64 representation
+            const base64Image = canvas.toDataURL('image/jpeg', 0.8);
+
+            // UI updates
+            captureBtn.disabled = true;
+            loader.classList.add('active');
+            results.classList.remove('visible');
+
+            try {
+                const response = await fetch('/upload_camera', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ image: base64Image })
+                });
+
+                const data = await response.json();
+
+                if (data.error) {
+                    alert(data.error);
+                } else {
+                    resultImg.src = data.image_url + '?t=' + new Date().getTime();
+                    plateText.textContent = data.text;
+                    results.classList.add('visible');
+                    // Scroll down to results smoothly
+                    results.scrollIntoView({ behavior: 'smooth' });
+                }
+            } catch (err) {
+                console.error("Error sending frame:", err);
+                alert("Failed to process the captured frame.");
+            } finally {
+                loader.classList.remove('active');
+                captureBtn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANPR Lite - Image Upload</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+<header>
+    <h1>ANPR Lite</h1>
+    <p>Premium Number Plate Detection System</p>
+</header>
+
+<nav>
+    <a href="/" class="nav-link active"><i class="fas fa-upload"></i> Upload Image</a>
+    <a href="/camera" class="nav-link"><i class="fas fa-camera"></i> Live Camera</a>
+</nav>
+
+<main>
+    <div class="glass-panel">
+
+        <!-- ✅ FORM FIXED -->
+        <form action="/upload" method="post" enctype="multipart/form-data">
+            <div class="upload-area" onclick="document.getElementById('file-input').click()">
+                <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                <h2>Upload Image</h2>
+                <p>Click to browse</p>
+
+                <!-- 🔥 FIX: name="file" -->
+                <input type="file" id="file-input" name="file" accept="image/*" required>
+            </div>
+
+            <br>
+            <button type="submit" class="btn">
+                <i class="fas fa-search"></i> Detect Plate
+            </button>
+        </form>
+
+        <!-- RESULTS -->
+        {% if result %}
+        <div class="results-container visible">
+
+            <div class="image-preview-wrapper">
+                <img src="{{ result }}" alt="Processed Image" width="400">
+            </div>
+
+            <div class="extraction-result">
+                <h3>Extracted Plate Text</h3>
+                <div>{{ text }}</div>
+            </div>
+
+            {% if plate %}
+            <div style="margin-top: 20px;">
+                <h3>Detected Plate Region</h3>
+                <img src="{{ plate }}" width="300">
+            </div>
+            {% endif %}
+
+        </div>
+        {% endif %}
+
+    </div>
+</main>
+
+</body>
+</html>
