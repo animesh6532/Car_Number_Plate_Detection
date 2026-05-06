@@ -96,4 +96,4 @@ Then, open your web browser and navigate to: `http://127.0.0.1:5000/`
 This project is open-source and free to be adapted for educational or enterprise applications.
 
 ---
-*Built with ❤️ utilizing Python, OpenCV and Flask.*
+
